@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X Academy | رحلة احتراف المعادلات</title>
+    <title>X Academy | رحلة احتراف المعادلات البسيطة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -38,16 +38,31 @@
             padding: 0 30px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             z-index: 100;
+            flex-shrink: 0;
         }
 
-        .logo { height: 50px; }
-        .app-title { font-weight: 800; color: var(--primary); font-size: 1.2rem; }
+       .logo-text {
+    display: flex;
+    align-items: center;
+    font-weight: 800;
+    font-size: 1.8rem; /* حجم مناسب للشاشة */
+    gap: 5px; /* مسافة بين X و اكاديمي */
+}
+
+.logo-x {
+    color: #099999;
+}
+
+.logo-name {
+    color: #000;
+}
+
 
         /* --- Layout --- */
         .main-container {
             display: flex;
             flex: 1;
-            height: calc(100vh - 70px);
+            /* height is managed by flex parent now */
             overflow: hidden;
         }
 
@@ -97,6 +112,7 @@
             justify-content: center;
             position: relative;
             background: radial-gradient(circle at top left, #fcfdfd, #ecf0f1);
+            overflow-y: auto; /* السماح بالتمرير إذا كانت الشاشة صغيرة */
         }
 
         .progress-container {
@@ -104,8 +120,9 @@
             height: 6px;
             background: #e0e0e0;
             border-radius: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             overflow: hidden;
+            flex-shrink: 0;
         }
         .progress-bar {
             height: 100%;
@@ -115,31 +132,55 @@
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* --- Formula Stage --- */
         .formula-stage {
             background: #fff;
-            padding: 35px;
+            padding: 30px;
             border-radius: 20px;
             box-shadow: var(--shadow);
             width: 100%;
             max-width: 750px;
             text-align: center;
             border: 1px solid #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* --- Goal Box (السؤال الثابت) --- */
+        .goal-box {
+            background: #fff8e1; /* لون خلفية أصفر فاتح للتميز */
+            border: 1px solid #ffe082;
+            color: #d35400;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: right;
+        }
+        
+        .goal-icon {
+            font-size: 1.5rem;
+            color: #f39c12;
         }
 
         .step-label {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-gray);
-            margin-bottom: 15px;
             text-transform: uppercase;
             font-weight: 800;
             letter-spacing: 1px;
+            align-self: flex-start;
         }
 
         .visual-code-container {
             background: #2c3e50;
             border-radius: 12px;
             padding: 20px 30px;
-            margin: 15px 0;
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
             text-align: left;
             direction: ltr;
@@ -168,11 +209,10 @@
         @keyframes blink { 50% { opacity: 0; } }
 
         .explanation-text {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             line-height: 1.6;
             color: var(--dark);
-            min-height: 70px;
-            margin-bottom: 25px;
+            min-height: 60px;
         }
 
         .highlight-text { color: var(--primary); font-weight: 800; }
@@ -183,6 +223,7 @@
             gap: 15px;
             justify-content: center;
             width: 100%;
+            margin-top: 10px;
         }
 
         .btn {
@@ -240,23 +281,92 @@
         .highlight-criteria { background-color: #fad7a0 !important; color: #e67e22; font-weight: bold; }
         .dimmed-col { opacity: 0.3; filter: blur(1px); }
 
+        /* --- Footer --- */
+        footer {
+            background: var(--dark);
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-shrink: 0;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.8rem;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        footer span {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-left: 10px;
+        }
+
         /* Mobile */
         @media (max-width: 768px) {
             .main-container { flex-direction: column; height: auto; overflow: auto; }
             .side-panel { width: 100%; height: auto; flex-direction: row; overflow-x: auto; white-space: nowrap; padding: 10px; }
-            .interaction-panel { padding: 15px; min-height: 480px; }
+            .interaction-panel { padding: 15px; min-height: 500px; }
             .visual-code { font-size: 1.3rem; }
             .data-panel { height: 350px; }
             header { padding: 0 15px; }
+            footer { gap: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <img src="https://raw.githubusercontent.com/BaselGhanem/Basics1/refs/heads/main/X%20Academy%20white.png" alt="X Academy" class="logo">
-        <div class="app-title"><i class="fas fa-calculator"></i> ماستر المعادلات</div>
-    </header>
+<header>
+    <div class="logo-text">
+    <span class="logo-x">X</span>
+    <span class="logo-name">اكاديمي</span>
+</div>
+
+   <header>
+    <div class="app-title"><i class="fas fa-calculator"></i> المعادلات البسيطة</div>
+</header>
+
+<style>
+/* --- Logo Text --- */
+.logo-text {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 900;
+    font-size: 1.8rem; /* حجم مناسب */
+}
+
+.logo-x {
+    color: #099999; /* لون X */
+}
+
+.logo-name {
+    color: #000; /* لون اكاديمي */
+}
+
+/* --- App Title --- */
+.app-title {
+    font-weight: 800;
+    color: #000; /* أسود */
+    font-size: 1.5rem; /* حجم مناسب مع X اكاديمي */
+    display: flex;
+    align-items: center;
+    gap: 8px; /* مسافة بين الايقونة والنص */
+}
+</style>
+>
+</header>
+
 
     <div class="main-container">
         <nav class="side-panel" id="sidePanel"></nav>
@@ -267,7 +377,12 @@
             </div>
 
             <div class="formula-stage">
-                <div class="step-label" id="stepLabel">جاري التحميل...</div>
+                <div class="goal-box">
+                    <i class="fas fa-bullseye goal-icon"></i>
+                    <div id="goalText">جاري تحميل المطلوب...</div>
+                </div>
+
+                <div class="step-label" id="stepLabel">خطوة 1</div>
                 
                 <div class="visual-code-container">
                     <span class="visual-code" id="visualCode"></span><span class="cursor"></span>
@@ -301,76 +416,126 @@
         </aside>
     </div>
 
+    <footer>
+        <span>Developed by Basel Ghanem</span>
+        
+    <a href="https://www.linkedin.com/in/baselghanem/" target="_blank" title="LinkedIn">
+        <i class="fab fa-linkedin"></i>
+    </a>
+
+    <!-- WhatsApp -->
+    <a href="https://wa.me/962788458787" target="_blank" title="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </footer>
+
     <script>
         /*
-           نظام التظليل (Highlight System):
-           codes: [colIndex1, colIndex2, ...]
-           2 = عمود الشعبة
-           3 = عمود الدرجة
-           null = إعادة تعيين
+            الهيكل الجديد:
+            - goal: النص الذي سيظهر دائماً في الأعلى (السؤال).
+            - steps: خطوات كتابة الكود فقط.
         */
 
         const lessons = [
-            { name: "SUM", steps: [
-                { t: "البداية", code: "=SUM(", d: "نكتب اسم الدالة SUM لجمع الأرقام.", h: [] },
-                { t: "التحديد", code: "=SUM(D2:D9", d: "نحدد عمود الدرجات بالكامل.", h: [3] },
-                { t: "الإغلاق", code: "=SUM(D2:D9)", d: "نغلق القوس.", h: [3] },
-                { t: "النتيجة", code: "594", d: "مجموع كل الدرجات الموجودة.", h: [] }
-            ]},
-            { name: "MIN", steps: [
-                { t: "البداية", code: "=MIN(", d: "دالة MIN تستخرج أصغر قيمة (Minimum).", h: [] },
-                { t: "التحديد", code: "=MIN(D2:D9", d: "نحدد نطاق الدرجات للبحث فيه.", h: [3] },
-                { t: "النتيجة", code: "=MIN(D2:D9) -> 65", d: "أقل درجة في الكشف هي 65.", h: [3] }
-            ]},
-            { name: "MAX", steps: [ // تم دمجها مع طلبك للكود العام ولكن سنستخدم LARGE/SMALL كما طلبت
-                { t: "البداية", code: "=MAX(", d: "دالة MAX تستخرج أكبر قيمة.", h: [] },
-                { t: "التحديد", code: "=MAX(D2:D9", d: "نحدد عمود الدرجات.", h: [3] },
-                { t: "النتيجة", code: "98", d: "أعلى درجة هي 98 (لاحظ تجاهل النصوص).", h: [3] }
-            ]},
-            { name: "COUNT", steps: [
-                { t: "المفهوم", code: "=COUNT(", d: "انتبه: COUNT تعد <span class='highlight-text'>الأرقام فقط</span>.", h: [] },
-                { t: "التحديد", code: "=COUNT(D2:D9", d: "سنحدد النطاق الذي يحتوي على (أرقام، فراغ، نص).", h: [3] },
-                { t: "التحليل", code: "=COUNT(D2:D9)", d: "سيتم تجاهل الخلية الفارغة وكلمة 'غائب'.", h: [3] },
-                { t: "النتيجة", code: "6", d: "لدينا 6 خلايا تحتوي على أرقام فقط.", h: [] }
-            ]},
-            { name: "AVERAGE", steps: [
-                { t: "البداية", code: "=AVERAGE(", d: "حساب المعدل (المتوسط الحسابي).", h: [] },
-                { t: "التحديد", code: "=AVERAGE(D2:D9", d: "نحدد الدرجات.", h: [3] },
-                { t: "الآلية", code: "=AVERAGE(D2:D9)", d: "المجموع ÷ العدد (يتجاهل الفارغ والنص تلقائياً).", h: [3] },
-                { t: "النتيجة", code: "99", d: "معدل درجات الطلاب الحاضرين.", h: [] }
-            ]},
-            { name: "COUNTA", steps: [
-                { t: "المفهوم", code: "=COUNTA(", d: "COUNTA تعد <span class='highlight-text'>الكل</span> (All) ما عدا الفراغ.", h: [] },
-                { t: "التحديد", code: "=COUNTA(D2:D9", d: "نحدد نفس النطاق السابق.", h: [3] },
-                { t: "الفرق", code: "=COUNTA(D2:D9)", d: "سيتم عد كلمة 'غائب' لأنها ليست فارغة!", h: [3] },
-                { t: "النتيجة", code: "7", d: "العدد 7 (6 أرقام + 1 نص). الفراغ فقط لم يحسب.", h: [] }
-            ]},
-            { name: "LARGE", steps: [
-                { t: "المفهوم", code: "=LARGE(", d: "تستخدم لجلب الترتيب (الأول، الثاني، الثالث...).", h: [] },
-                { t: "النطاق", code: "=LARGE(D2:D9,", d: "أولاً نحدد نطاق الدرجات.", h: [3] },
-                { t: "الرتبة K", code: "=LARGE(D2:D9, 2)", d: "الرقم 2 يعني: اعطني <span class='highlight-text'>ثاني</span> أعلى قيمة.", h: [3] },
-                { t: "النتيجة", code: "95", d: "ثاني أعلى درجة بعد الـ 98 هي 95.", h: [] }
-            ]},
-            { name: "SMALL", steps: [
-                { t: "المفهوم", code: "=SMALL(", d: "عكس LARGE، تجلب أصغر القيم بالترتيب.", h: [] },
-                { t: "النطاق", code: "=SMALL(D2:D9,", d: "نحدد النطاق.", h: [3] },
-                { t: "الرتبة K", code: "=SMALL(D2:D9, 3)", d: "نريد <span class='highlight-text'>ثالث</span> أصغر درجة في الصف.", h: [3] },
-                { t: "النتيجة", code: "88", d: "ثالث أسوأ درجة هي 88.", h: [] }
-            ]},
-            { name: "MAXIFS", steps: [
-                { t: "المفهوم", code: "=MAXIFS(", d: "أكبر قيمة <span class='highlight-text'>بشرط</span> محدد.", h: [] },
-                { t: "نطاق الماكس", code: "=MAXIFS(D2:D9,", d: "أولاً: حدد العمود الذي تريد الرقم منه (الدرجات).", h: [3] },
-                { t: "نطاق الشرط", code: "=MAXIFS(D2:D9, C2:C9,", d: "ثانياً: حدد عمود الشرط (الشعبة).", h: [2] }, // Highlight Class
-                { t: "الشرط", code: "=MAXIFS=MAXIFS(D2:D9, C2:C9, \"أ\")", d: "ثالثاً: نكتب الشرط (الشعبة أ فقط).", h: [2] },
-                { t: "النتيجة", code: "98", d: "أعلى درجة في شعبة (أ) هي 98.", h: [] }
-            ]},
-            { name: "MINIFS", steps: [
-                { t: "المفهوم", code: "=MINIFS(", d: "أقل قيمة <span class='highlight-text'>بشرط</span>.", h: [] },
-                { t: "نطاق المين", code: "=MINIFS(D2:D9,", d: "حدد عمود الأرقام (الدرجات).", h: [3] },
-                { t: "نطاق الشرط", code: "=MINIFS(D2:D9, C2:C9,", d: "حدد عمود الشرط (الشعبة).", h: [2] },
-                { t: "الشرط", code: "=MINIFSS(D2:D9, C2:C9, \"ب\")", d: "نريد أقل درجة في الشعبة (ب) فقط.", h: [2] },
-                 { t: "النتيجة", code: "=65", d: "أقل درجة في شعبة ب هي 65.", h: [] }
-            ]}
+            { 
+                name: "SUM", 
+                goal: "المطلوب: حساب <b>المجموع الكلي</b> لدرجات جميع الطلاب في الكشف.",
+                steps: [
+                    { t: "البداية", code: "=SUM(", d: "نكتب اسم الدالة SUM لجمع الأرقام.", h: [] },
+                    { t: "التحديد", code: "=SUM(D2:D9", d: "نحدد عمود الدرجات بالكامل.", h: [3] },
+                    { t: "الإغلاق", code: "=SUM(D2:D9)", d: "نغلق القوس.", h: [3] },
+                    { t: "النتيجة", code: "594", d: "مجموع كل الدرجات الموجودة.", h: [] }
+                ]
+            },
+            { 
+                name: "MIN", 
+                goal: "المطلوب: معرفة <b>أقل درجة</b> حصل عليها أي طالب في الكشف.",
+                steps: [
+                    { t: "البداية", code: "=MIN(", d: "دالة MIN تستخرج أصغر قيمة (Minimum).", h: [] },
+                    { t: "التحديد", code: "=MIN(D2:D9", d: "نحدد نطاق الدرجات للبحث فيه.", h: [3] },
+                    { t: "النتيجة", code: "=MIN(D2:D9) -> 65", d: "أقل درجة في الكشف هي 65.", h: [3] }
+                ]
+            },
+            { 
+                name: "MAX", 
+                goal: "المطلوب: معرفة <b>أعلى درجة</b> في الكشف كاملاً.",
+                steps: [ 
+                    { t: "البداية", code: "=MAX(", d: "دالة MAX تستخرج أكبر قيمة.", h: [] },
+                    { t: "التحديد", code: "=MAX(D2:D9", d: "نحدد عمود الدرجات.", h: [3] },
+                    { t: "النتيجة", code: "98", d: "أعلى درجة هي 98 (لاحظ تجاهل النصوص).", h: [3] }
+                ]
+            },
+            { 
+                name: "COUNT", 
+                goal: "المطلوب: معرفة عدد الطلاب الذين لديهم <b>درجة رقمية مرصودة</b> فقط.",
+                steps: [
+                    { t: "المفهوم", code: "=COUNT(", d: "انتبه: COUNT تعد <span class='highlight-text'>الأرقام فقط</span>.", h: [] },
+                    { t: "التحديد", code: "=COUNT(D2:D9", d: "سنحدد النطاق الذي يحتوي على (أرقام، فراغ، نص).", h: [3] },
+                    { t: "التحليل", code: "=COUNT(D2:D9)", d: "سيتم تجاهل الخلية الفارغة وكلمة 'غائب'.", h: [3] },
+                    { t: "النتيجة", code: "6", d: "لدينا 6 خلايا تحتوي على أرقام فقط.", h: [] }
+                ]
+            },
+            { 
+                name: "AVERAGE", 
+                goal: "المطلوب: حساب <b>متوسط الدرجات (المعدل)</b> للطلاب الحاضرين.",
+                steps: [
+                    { t: "البداية", code: "=AVERAGE(", d: "حساب المعدل (المتوسط الحسابي).", h: [] },
+                    { t: "التحديد", code: "=AVERAGE(D2:D9", d: "نحدد الدرجات.", h: [3] },
+                    { t: "الآلية", code: "=AVERAGE(D2:D9)", d: "المجموع ÷ العدد (يتجاهل الفارغ والنص تلقائياً).", h: [3] },
+                    { t: "النتيجة", code: "99", d: "معدل درجات الطلاب الحاضرين.", h: [] }
+                ]
+            },
+            { 
+                name: "COUNTA", 
+                goal: "المطلوب: معرفة العدد الكلي للطلاب <b>غير الفارغين</b> (حضور + غياب).",
+                steps: [
+                    { t: "المفهوم", code: "=COUNTA(", d: "COUNTA تعد <span class='highlight-text'>الكل</span> (All) ما عدا الفراغ.", h: [] },
+                    { t: "التحديد", code: "=COUNTA(D2:D9", d: "نحدد نفس النطاق السابق.", h: [3] },
+                    { t: "الفرق", code: "=COUNTA(D2:D9)", d: "سيتم عد كلمة 'غائب' لأنها ليست فارغة!", h: [3] },
+                    { t: "النتيجة", code: "7", d: "العدد 7 (6 أرقام + 1 نص). الفراغ فقط لم يحسب.", h: [] }
+                ]
+            },
+            { 
+                name: "LARGE", 
+                goal: "المطلوب: معرفة <b>ثاني أعلى درجة</b> في الفصل (الترتيب رقم 2).",
+                steps: [
+                    { t: "المفهوم", code: "=LARGE(", d: "تستخدم لجلب الترتيب (الأول، الثاني، الثالث...).", h: [] },
+                    { t: "النطاق", code: "=LARGE(D2:D9,", d: "أولاً نحدد نطاق الدرجات.", h: [3] },
+                    { t: "الرتبة K", code: "=LARGE(D2:D9, 2)", d: "الرقم 2 يعني: اعطني <span class='highlight-text'>ثاني</span> أعلى قيمة.", h: [3] },
+                    { t: "النتيجة", code: "95", d: "ثاني أعلى درجة بعد الـ 98 هي 95.", h: [] }
+                ]
+            },
+            { 
+                name: "SMALL", 
+                goal: "المطلوب: معرفة <b>ثالث أقل درجة</b> في الفصل.",
+                steps: [
+                    { t: "المفهوم", code: "=SMALL(", d: "عكس LARGE، تجلب أصغر القيم بالترتيب.", h: [] },
+                    { t: "النطاق", code: "=SMALL(D2:D9,", d: "نحدد النطاق.", h: [3] },
+                    { t: "الرتبة K", code: "=SMALL(D2:D9, 3)", d: "نريد <span class='highlight-text'>ثالث</span> أصغر درجة في الصف.", h: [3] },
+                    { t: "النتيجة", code: "88", d: "ثالث أسوأ درجة هي 88.", h: [] }
+                ]
+            },
+            { 
+                name: "MAXIFS", 
+                goal: "المطلوب: معرفة أعلى درجة، ولكن بشرط أن يكون الطالب من <b>الشعبة (أ)</b>.",
+                steps: [
+                    { t: "المفهوم", code: "=MAXIFS(", d: "أكبر قيمة <span class='highlight-text'>بشرط</span> محدد.", h: [] },
+                    { t: "نطاق الماكس", code: "=MAXIFS(D2:D9,", d: "أولاً: حدد العمود الذي تريد الرقم منه (الدرجات).", h: [3] },
+                    { t: "نطاق الشرط", code: "=MAXIFS(D2:D9, C2:C9,", d: "ثانياً: حدد عمود الشرط (الشعبة).", h: [2] }, 
+                    { t: "الشرط", code: "=MAXIFS(D2:D9, C2:C9, \"أ\")", d: "ثالثاً: نكتب الشرط (الشعبة أ فقط).", h: [2] },
+                    { t: "النتيجة", code: "98", d: "أعلى درجة في شعبة (أ) هي 98.", h: [] }
+                ]
+            },
+            { 
+                name: "MINIFS", 
+                goal: "المطلوب: معرفة أقل درجة، ولكن بشرط أن يكون الطالب من <b>الشعبة (ب)</b>.",
+                steps: [
+                    { t: "المفهوم", code: "=MINIFS(", d: "أقل قيمة <span class='highlight-text'>بشرط</span>.", h: [] },
+                    { t: "نطاق المين", code: "=MINIFS(D2:D9,", d: "حدد عمود الأرقام (الدرجات).", h: [3] },
+                    { t: "نطاق الشرط", code: "=MINIFS(D2:D9, C2:C9,", d: "حدد عمود الشرط (الشعبة).", h: [2] },
+                    { t: "الشرط", code: "=MINIFS(D2:D9, C2:C9, \"ب\")", d: "نريد أقل درجة في الشعبة (ب) فقط.", h: [2] },
+                     { t: "النتيجة", code: "=65", d: "أقل درجة في شعبة ب هي 65.", h: [] }
+                ]
+            }
         ];
 
         let currentLesson = 0;
@@ -403,10 +568,12 @@
             const lesson = lessons[currentLesson];
             const step = lesson.steps[currentStep];
             
+            // تحديث السؤال الثابت
+            document.getElementById('goalText').innerHTML = lesson.goal;
+
             // Sidebar
             document.querySelectorAll('.lesson-btn').forEach((b, i) => {
                 b.className = `lesson-btn ${i === currentLesson ? 'active' : ''}`;
-                // إضافة أيقونة للدالة النشطة
                 if(i === currentLesson) {
                     b.innerHTML = `<span>${lessons[i].name}</span> <i class="fas fa-pen-fancy"></i>`;
                 } else {
@@ -441,11 +608,11 @@
 
             if (currentStep === lesson.steps.length - 1) {
                 if(currentLesson < lessons.length - 1) {
-                     nextBtn.innerHTML = `التالي: ${lessons[currentLesson+1].name} <i class="fas fa-forward"></i>`;
-                     nextBtn.style.background = "#f39c12"; 
+                      nextBtn.innerHTML = `التالي: ${lessons[currentLesson+1].name} <i class="fas fa-forward"></i>`;
+                      nextBtn.style.background = "#f39c12"; 
                 } else {
-                     nextBtn.innerHTML = `إنهاء الكورس <i class="fas fa-trophy"></i>`;
-                     nextBtn.style.background = "#27ae60"; 
+                      nextBtn.innerHTML = `إنهاء الكورس <i class="fas fa-trophy"></i>`;
+                      nextBtn.style.background = "#27ae60"; 
                 }
             } else {
                 nextBtn.innerHTML = `التالي <i class="fas fa-arrow-left"></i>`;
@@ -461,8 +628,8 @@
             // Reset All
             rows.forEach(r => {
                 Array.from(r.children).forEach(td => {
-                    td.className = td.dataset.originalClass || ''; // Restore original classes (empty/text)
-                    td.style.opacity = '0.4'; // Dim everything by default
+                    td.className = td.dataset.originalClass || ''; 
+                    td.style.opacity = '0.4'; 
                 });
             });
             headers.forEach(h => h.style.background = '#f8f9fa');
@@ -470,15 +637,12 @@
             // Apply Highlight
             if (targetCols && targetCols.length > 0) {
                 targetCols.forEach(colIndex => {
-                    // Highlight Header
                     headers[colIndex].style.background = '#d1f2eb';
-                    
-                    // Highlight Cells
                     rows.forEach(r => {
                         const cell = r.children[colIndex];
                         cell.style.opacity = '1';
                         
-                        if(colIndex === 2) { // Class Column
+                        if(colIndex === 2) { 
                             cell.classList.add('highlight-criteria');
                         } else {
                             cell.classList.add('highlight-col');
@@ -486,7 +650,6 @@
                     });
                 });
             } else {
-                // If no highlight, show everything normal
                 rows.forEach(r => {
                     Array.from(r.children).forEach(td => td.style.opacity = '1');
                 });
@@ -504,7 +667,7 @@
                 currentStep = 0;
                 updateUI(true);
             } else {
-                alert("أحسنت! لقد أتممت جميع المعادلات بنجاح.");
+                alert("أحسنت! لقد أتممت جميع المعادلات البسيطة بنجاح.");
             }
         }
 
@@ -537,20 +700,15 @@
             });
         }
 
-        // --- Data Generation (Smart Data) ---
+        // --- Data Generation ---
         function generateTable() {
             const tbody = document.getElementById('tableBody');
-            
-            // Data designed to test all edge cases:
-            // Empty cell -> for COUNT vs COUNTA
-            // Text in number column -> for Error handling teaching
-            // Classes A/B -> for MAXIFS/MINIFS
             const data = [
                 { id: 1, name: "أحمد علي", class: "أ", score: 85 },
                 { id: 2, name: "سارة خالد", class: "أ", score: 98 },
-                { id: 3, name: "عمر يوسف", class: "ب", score: null }, // Empty
+                { id: 3, name: "عمر يوسف", class: "ب", score: null }, 
                 { id: 4, name: "ليلى حسن", class: "ب", score: 95 },
-                { id: 5, name: "خالد سامي", class: "أ", score: "غائب" }, // Text
+                { id: 5, name: "خالد سامي", class: "أ", score: "غائب" }, 
                 { id: 6, name: "نور الهدى", class: "ب", score: 65 },
                 { id: 7, name: "رامي كمال", class: "أ", score: 88 },
                 { id: 8, name: "هدى بيطار", class: "ب", score: 92 }
