@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X Academy | رحلة احتراف المعادلات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #099999;
+            --primary-light: #e0f7f7;
+            --accent: #f39c12;
+            --dark: #2c3e50;
+            --text-gray: #636e72;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; transition: all 0.3s ease; }
+        
+        body {
+            background-color: #f0f4f8;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: var(--dark);
+        }
+
+        /* --- Header --- */
+        header {
+            background: #fff;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+
+        .logo { height: 50px; }
+        .app-title { font-weight: 800; color: var(--primary); font-size: 1.2rem; }
+
+        /* --- Layout --- */
+        .main-container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 70px);
+            overflow: hidden;
+        }
+
+        /* --- Sidebar --- */
+        .side-panel {
+            width: 260px;
+            background: #fff;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            border-left: 1px solid #eee;
+        }
+
+        .lesson-btn {
+            background: transparent;
+            border: none;
+            text-align: right;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lesson-btn:hover { background: #f8f9fa; color: var(--primary); transform: translateX(-3px); }
+        
+        .lesson-btn.active {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 800;
+            border-right: 4px solid var(--primary);
+        }
+
+        /* --- Main Interaction Area --- */
+        .interaction-panel {
+            flex: 2;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at top left, #fcfdfd, #ecf0f1);
+        }
+
+        .progress-container {
+            width: 90%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .formula-stage {
+            background: #fff;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 750px;
+            text-align: center;
+            border: 1px solid #fff;
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .visual-code-container {
+            background: #2c3e50;
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+            text-align: left;
+            direction: ltr;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .visual-code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            color: #ecf0f1;
+            font-size: 1.8rem;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 28px;
+            background: var(--accent);
+            animation: blink 1s infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .explanation-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: var(--dark);
+            min-height: 70px;
+            margin-bottom: 25px;
+        }
+
+        .highlight-text { color: var(--primary); font-weight: 800; }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn {
+            padding: 12px 35px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn:active { transform: scale(0.98); }
+
+        .btn-next { 
+            background: var(--primary); 
+            color: #fff; 
+            box-shadow: 0 4px 15px rgba(9, 153, 153, 0.3);
+        }
+        .btn-next:hover { background: #077a7a; box-shadow: 0 6px 20px rgba(9, 153, 153, 0.4); }
+
+        .btn-back { background: #fff; border: 2px solid #ddd; color: var(--text-gray); }
+        .btn-back:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* --- Data Panel (Table) --- */
+        .data-panel {
+            flex: 1.2;
+            background: #fff;
+            border-right: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.03);
+            padding: 15px;
+        }
+
+        .table-container {
+            overflow: auto;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            height: 100%;
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th { background: #f8f9fa; padding: 12px; position: sticky; top: 0; z-index: 2; text-align: center; color: var(--dark); }
+        td { padding: 10px; text-align: center; border-bottom: 1px solid #f1f1f1; transition: background 0.3s; }
+        
+        /* Special Cells */
+        .empty-cell { background: #ffeaa7; color: #d35400; font-style: italic; font-size: 0.8rem; }
+        .text-cell { color: #c0392b; font-weight: bold; }
+
+        /* Highlight Effects */
+        .highlight-col { background-color: #d1f2eb !important; color: var(--primary-dark); font-weight: bold; transform: scale(1.02); }
+        .highlight-criteria { background-color: #fad7a0 !important; color: #e67e22; font-weight: bold; }
+        .dimmed-col { opacity: 0.3; filter: blur(1px); }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; height: auto; overflow: auto; }
+            .side-panel { width: 100%; height: auto; flex-direction: row; overflow-x: auto; white-space: nowrap; padding: 10px; }
+            .interaction-panel { padding: 15px; min-height: 480px; }
+            .visual-code { font-size: 1.3rem; }
+            .data-panel { height: 350px; }
+            header { padding: 0 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://raw.githubusercontent.com/BaselGhanem/Basics1/refs/heads/main/X%20Academy%20white.png" alt="X Academy" class="logo">
+        <div class="app-title"><i class="fas fa-calculator"></i> ماستر المعادلات</div>
+    </header>
+
+    <div class="main-container">
+        <nav class="side-panel" id="sidePanel"></nav>
+
+        <main class="interaction-panel">
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <div class="formula-stage">
+                <div class="step-label" id="stepLabel">جاري التحميل...</div>
+                
+                <div class="visual-code-container">
+                    <span class="visual-code" id="visualCode"></span><span class="cursor"></span>
+                </div>
+                
+                <p class="explanation-text" id="explanationText"></p>
+                
+                <div class="controls">
+                    <button class="btn btn-back" id="backBtn" onclick="goBack()">عودة</button>
+                    <button class="btn btn-next" id="nextBtn" onclick="goNext()">التالي <i class="fas fa-arrow-left"></i></button>
+                </div>
+            </div>
+        </main>
+
+        <aside class="data-panel">
+            <div style="padding-bottom: 10px; font-weight:bold; color:var(--dark); text-align:center; border-bottom:1px solid #eee; margin-bottom:10px;">
+                <i class="fas fa-table"></i> درجات الطلاب (معاينة حية)
+            </div>
+            <div class="table-container">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>الاسم</th>
+                            <th id="col-class">الشعبة</th> <th id="col-score">الدرجة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        /*
+           نظام التظليل (Highlight System):
+           codes: [colIndex1, colIndex2, ...]
+           2 = عمود الشعبة
+           3 = عمود الدرجة
+           null = إعادة تعيين
+        */
+
+        const lessons = [
+            { name: "SUM", steps: [
+                { t: "البداية", code: "=SUM(", d: "نكتب اسم الدالة SUM لجمع الأرقام.", h: [] },
+                { t: "التحديد", code: "=SUM(D2:D9", d: "نحدد عمود الدرجات بالكامل.", h: [3] },
+                { t: "الإغلاق", code: "=SUM(D2:D9)", d: "نغلق القوس.", h: [3] },
+                { t: "النتيجة", code: "594", d: "مجموع كل الدرجات الموجودة.", h: [] }
+            ]},
+            { name: "MIN", steps: [
+                { t: "البداية", code: "=MIN(", d: "دالة MIN تستخرج أصغر قيمة (Minimum).", h: [] },
+                { t: "التحديد", code: "=MIN(D2:D9", d: "نحدد نطاق الدرجات للبحث فيه.", h: [3] },
+                { t: "النتيجة", code: "=MIN(D2:D9) -> 65", d: "أقل درجة في الكشف هي 65.", h: [3] }
+            ]},
+            { name: "MAX", steps: [ // تم دمجها مع طلبك للكود العام ولكن سنستخدم LARGE/SMALL كما طلبت
+                { t: "البداية", code: "=MAX(", d: "دالة MAX تستخرج أكبر قيمة.", h: [] },
+                { t: "التحديد", code: "=MAX(D2:D9", d: "نحدد عمود الدرجات.", h: [3] },
+                { t: "النتيجة", code: "98", d: "أعلى درجة هي 98 (لاحظ تجاهل النصوص).", h: [3] }
+            ]},
+            { name: "COUNT", steps: [
+                { t: "المفهوم", code: "=COUNT(", d: "انتبه: COUNT تعد <span class='highlight-text'>الأرقام فقط</span>.", h: [] },
+                { t: "التحديد", code: "=COUNT(D2:D9", d: "سنحدد النطاق الذي يحتوي على (أرقام، فراغ، نص).", h: [3] },
+                { t: "التحليل", code: "=COUNT(D2:D9)", d: "سيتم تجاهل الخلية الفارغة وكلمة 'غائب'.", h: [3] },
+                { t: "النتيجة", code: "6", d: "لدينا 6 خلايا تحتوي على أرقام فقط.", h: [] }
+            ]},
+            { name: "AVERAGE", steps: [
+                { t: "البداية", code: "=AVERAGE(", d: "حساب المعدل (المتوسط الحسابي).", h: [] },
+                { t: "التحديد", code: "=AVERAGE(D2:D9", d: "نحدد الدرجات.", h: [3] },
+                { t: "الآلية", code: "=AVERAGE(D2:D9)", d: "المجموع ÷ العدد (يتجاهل الفارغ والنص تلقائياً).", h: [3] },
+                { t: "النتيجة", code: "99", d: "معدل درجات الطلاب الحاضرين.", h: [] }
+            ]},
+            { name: "COUNTA", steps: [
+                { t: "المفهوم", code: "=COUNTA(", d: "COUNTA تعد <span class='highlight-text'>الكل</span> (All) ما عدا الفراغ.", h: [] },
+                { t: "التحديد", code: "=COUNTA(D2:D9", d: "نحدد نفس النطاق السابق.", h: [3] },
+                { t: "الفرق", code: "=COUNTA(D2:D9)", d: "سيتم عد كلمة 'غائب' لأنها ليست فارغة!", h: [3] },
+                { t: "النتيجة", code: "7", d: "العدد 7 (6 أرقام + 1 نص). الفراغ فقط لم يحسب.", h: [] }
+            ]},
+            { name: "LARGE", steps: [
+                { t: "المفهوم", code: "=LARGE(", d: "تستخدم لجلب الترتيب (الأول، الثاني، الثالث...).", h: [] },
+                { t: "النطاق", code: "=LARGE(D2:D9,", d: "أولاً نحدد نطاق الدرجات.", h: [3] },
+                { t: "الرتبة K", code: "=LARGE(D2:D9, 2)", d: "الرقم 2 يعني: اعطني <span class='highlight-text'>ثاني</span> أعلى قيمة.", h: [3] },
+                { t: "النتيجة", code: "95", d: "ثاني أعلى درجة بعد الـ 98 هي 95.", h: [] }
+            ]},
+            { name: "SMALL", steps: [
+                { t: "المفهوم", code: "=SMALL(", d: "عكس LARGE، تجلب أصغر القيم بالترتيب.", h: [] },
+                { t: "النطاق", code: "=SMALL(D2:D9,", d: "نحدد النطاق.", h: [3] },
+                { t: "الرتبة K", code: "=SMALL(D2:D9, 3)", d: "نريد <span class='highlight-text'>ثالث</span> أصغر درجة في الصف.", h: [3] },
+                { t: "النتيجة", code: "88", d: "ثالث أسوأ درجة هي 88.", h: [] }
+            ]},
+            { name: "MAXIFS", steps: [
+                { t: "المفهوم", code: "=MAXIFS(", d: "أكبر قيمة <span class='highlight-text'>بشرط</span> محدد.", h: [] },
+                { t: "نطاق الماكس", code: "=MAXIFS(D2:D9,", d: "أولاً: حدد العمود الذي تريد الرقم منه (الدرجات).", h: [3] },
+                { t: "نطاق الشرط", code: "=MAXIFS(D2:D9, C2:C9,", d: "ثانياً: حدد عمود الشرط (الشعبة).", h: [2] }, // Highlight Class
+                { t: "الشرط", code: "=MAXIFS=MAXIFS(D2:D9, C2:C9, \"أ\")", d: "ثالثاً: نكتب الشرط (الشعبة أ فقط).", h: [2] },
+                { t: "النتيجة", code: "98", d: "أعلى درجة في شعبة (أ) هي 98.", h: [] }
+            ]},
+            { name: "MINIFS", steps: [
+                { t: "المفهوم", code: "=MINIFS(", d: "أقل قيمة <span class='highlight-text'>بشرط</span>.", h: [] },
+                { t: "نطاق المين", code: "=MINIFS(D2:D9,", d: "حدد عمود الأرقام (الدرجات).", h: [3] },
+                { t: "نطاق الشرط", code: "=MINIFS(D2:D9, C2:C9,", d: "حدد عمود الشرط (الشعبة).", h: [2] },
+                { t: "الشرط", code: "=MINIFSS(D2:D9, C2:C9, \"ب\")", d: "نريد أقل درجة في الشعبة (ب) فقط.", h: [2] },
+                 { t: "النتيجة", code: "=65", d: "أقل درجة في شعبة ب هي 65.", h: [] }
+            ]}
+        ];
+
+        let currentLesson = 0;
+        let currentStep = 0;
+
+        // --- تهيئة ---
+        window.onload = () => {
+            renderSidebar();
+            generateTable();
+            updateUI(true);
+        };
+
+        // --- Typewriter Effect ---
+        function typeWriter(text, elementId, speed = 40) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = "";
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // --- UI Update Logic ---
+        function updateUI(animateType = false) {
+            const lesson = lessons[currentLesson];
+            const step = lesson.steps[currentStep];
+            
+            // Sidebar
+            document.querySelectorAll('.lesson-btn').forEach((b, i) => {
+                b.className = `lesson-btn ${i === currentLesson ? 'active' : ''}`;
+                // إضافة أيقونة للدالة النشطة
+                if(i === currentLesson) {
+                    b.innerHTML = `<span>${lessons[i].name}</span> <i class="fas fa-pen-fancy"></i>`;
+                } else {
+                    b.innerHTML = `<span>${lessons[i].name}</span>`;
+                }
+            });
+
+            // Progress
+            const progress = ((currentStep + 1) / lesson.steps.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+
+            // Text
+            document.getElementById('stepLabel').innerText = `${lesson.name} | خطوة ${currentStep + 1}`;
+            document.getElementById('explanationText').innerHTML = step.d;
+
+            // Code
+            if (animateType) {
+                typeWriter(step.code, 'visualCode');
+            } else {
+                document.getElementById('visualCode').innerText = step.code;
+            }
+
+            // Table Highlight
+            highlightTable(step.h);
+
+            // Buttons
+            const nextBtn = document.getElementById('nextBtn');
+            const backBtn = document.getElementById('backBtn');
+            
+            backBtn.disabled = (currentStep === 0 && currentLesson === 0);
+            backBtn.style.opacity = backBtn.disabled ? 0.5 : 1;
+
+            if (currentStep === lesson.steps.length - 1) {
+                if(currentLesson < lessons.length - 1) {
+                     nextBtn.innerHTML = `التالي: ${lessons[currentLesson+1].name} <i class="fas fa-forward"></i>`;
+                     nextBtn.style.background = "#f39c12"; 
+                } else {
+                     nextBtn.innerHTML = `إنهاء الكورس <i class="fas fa-trophy"></i>`;
+                     nextBtn.style.background = "#27ae60"; 
+                }
+            } else {
+                nextBtn.innerHTML = `التالي <i class="fas fa-arrow-left"></i>`;
+                nextBtn.style.background = ""; 
+            }
+        }
+
+        // --- Table Highlight System ---
+        function highlightTable(targetCols) {
+            const rows = document.querySelectorAll('#dataTable tbody tr');
+            const headers = document.querySelectorAll('#dataTable th');
+            
+            // Reset All
+            rows.forEach(r => {
+                Array.from(r.children).forEach(td => {
+                    td.className = td.dataset.originalClass || ''; // Restore original classes (empty/text)
+                    td.style.opacity = '0.4'; // Dim everything by default
+                });
+            });
+            headers.forEach(h => h.style.background = '#f8f9fa');
+
+            // Apply Highlight
+            if (targetCols && targetCols.length > 0) {
+                targetCols.forEach(colIndex => {
+                    // Highlight Header
+                    headers[colIndex].style.background = '#d1f2eb';
+                    
+                    // Highlight Cells
+                    rows.forEach(r => {
+                        const cell = r.children[colIndex];
+                        cell.style.opacity = '1';
+                        
+                        if(colIndex === 2) { // Class Column
+                            cell.classList.add('highlight-criteria');
+                        } else {
+                            cell.classList.add('highlight-col');
+                        }
+                    });
+                });
+            } else {
+                // If no highlight, show everything normal
+                rows.forEach(r => {
+                    Array.from(r.children).forEach(td => td.style.opacity = '1');
+                });
+            }
+        }
+
+        // --- Navigation ---
+        function goNext() {
+            const lesson = lessons[currentLesson];
+            if (currentStep < lesson.steps.length - 1) {
+                currentStep++;
+                updateUI(true);
+            } else if (currentLesson < lessons.length - 1) {
+                currentLesson++;
+                currentStep = 0;
+                updateUI(true);
+            } else {
+                alert("أحسنت! لقد أتممت جميع المعادلات بنجاح.");
+            }
+        }
+
+        function goBack() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateUI(false);
+            } else if (currentLesson > 0) {
+                currentLesson--;
+                currentStep = lessons[currentLesson].steps.length - 1;
+                updateUI(false);
+            }
+        }
+
+        function selectLesson(index) {
+            currentLesson = index;
+            currentStep = 0;
+            updateUI(true);
+        }
+
+        function renderSidebar() {
+            const nav = document.getElementById('sidePanel');
+            nav.innerHTML = '';
+            lessons.forEach((l, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'lesson-btn';
+                btn.onclick = () => selectLesson(i);
+                btn.innerHTML = `<span>${l.name}</span>`;
+                nav.appendChild(btn);
+            });
+        }
+
+        // --- Data Generation (Smart Data) ---
+        function generateTable() {
+            const tbody = document.getElementById('tableBody');
+            
+            // Data designed to test all edge cases:
+            // Empty cell -> for COUNT vs COUNTA
+            // Text in number column -> for Error handling teaching
+            // Classes A/B -> for MAXIFS/MINIFS
+            const data = [
+                { id: 1, name: "أحمد علي", class: "أ", score: 85 },
+                { id: 2, name: "سارة خالد", class: "أ", score: 98 },
+                { id: 3, name: "عمر يوسف", class: "ب", score: null }, // Empty
+                { id: 4, name: "ليلى حسن", class: "ب", score: 95 },
+                { id: 5, name: "خالد سامي", class: "أ", score: "غائب" }, // Text
+                { id: 6, name: "نور الهدى", class: "ب", score: 65 },
+                { id: 7, name: "رامي كمال", class: "أ", score: 88 },
+                { id: 8, name: "هدى بيطار", class: "ب", score: 92 }
+            ];
+            
+            let html = '';
+            data.forEach(row => {
+                let scoreClass = '';
+                let scoreDisplay = row.score;
+
+                if (row.score === null) {
+                    scoreDisplay = ""; 
+                    scoreClass = 'empty-cell';
+                } else if (typeof row.score === 'string') {
+                    scoreClass = 'text-cell';
+                }
+
+                html += `<tr>
+                    <td>${row.id}</td>
+                    <td>${row.name}</td>
+                    <td data-original-class="">${row.class}</td>
+                    <td data-original-class="${scoreClass}" class="${scoreClass}">${scoreDisplay}</td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
