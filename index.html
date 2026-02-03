@@ -24,7 +24,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow: hidden; /* Default for Laptop */
             color: var(--dark);
         }
 
@@ -41,29 +41,31 @@
             flex-shrink: 0;
         }
 
-       .logo-text {
-    display: flex;
-    align-items: center;
-    font-weight: 800;
-    font-size: 1.8rem; /* حجم مناسب للشاشة */
-    gap: 5px; /* مسافة بين X و اكاديمي */
-}
+        .logo-text {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 900;
+            font-size: 1.8rem;
+        }
 
-.logo-x {
-    color: #099999;
-}
+        .logo-x { color: var(--primary); }
+        .logo-name { color: #000; }
 
-.logo-name {
-    color: #000;
-}
-
+        .app-title {
+            font-weight: 800;
+            color: #000;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
         /* --- Layout --- */
         .main-container {
             display: flex;
             flex: 1;
-            /* height is managed by flex parent now */
-            overflow: hidden;
+            overflow: hidden; /* Default for Laptop */
         }
 
         /* --- Sidebar --- */
@@ -76,6 +78,7 @@
             gap: 8px;
             overflow-y: auto;
             border-left: 1px solid #eee;
+            flex-shrink: 0;
         }
 
         .lesson-btn {
@@ -91,6 +94,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            white-space: nowrap;
         }
 
         .lesson-btn:hover { background: #f8f9fa; color: var(--primary); transform: translateX(-3px); }
@@ -112,7 +116,7 @@
             justify-content: center;
             position: relative;
             background: radial-gradient(circle at top left, #fcfdfd, #ecf0f1);
-            overflow-y: auto; /* السماح بالتمرير إذا كانت الشاشة صغيرة */
+            overflow-y: auto;
         }
 
         .progress-container {
@@ -147,9 +151,8 @@
             gap: 15px;
         }
 
-        /* --- Goal Box (السؤال الثابت) --- */
         .goal-box {
-            background: #fff8e1; /* لون خلفية أصفر فاتح للتميز */
+            background: #fff8e1;
             border: 1px solid #ffe082;
             color: #d35400;
             padding: 15px;
@@ -163,10 +166,7 @@
             text-align: right;
         }
         
-        .goal-icon {
-            font-size: 1.5rem;
-            color: #f39c12;
-        }
+        .goal-icon { font-size: 1.5rem; color: #f39c12; flex-shrink: 0; }
 
         .step-label {
             font-size: 0.85rem;
@@ -195,6 +195,7 @@
             font-size: 1.8rem;
             font-weight: bold;
             line-height: 1.4;
+            word-break: break-all;
         }
 
         .cursor {
@@ -236,6 +237,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            white-space: nowrap;
         }
         
         .btn:active { transform: scale(0.98); }
@@ -259,6 +261,7 @@
             flex-direction: column;
             box-shadow: -5px 0 20px rgba(0,0,0,0.03);
             padding: 15px;
+            overflow: hidden;
         }
 
         .table-container {
@@ -269,8 +272,8 @@
         }
 
         table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-        th { background: #f8f9fa; padding: 12px; position: sticky; top: 0; z-index: 2; text-align: center; color: var(--dark); }
-        td { padding: 10px; text-align: center; border-bottom: 1px solid #f1f1f1; transition: background 0.3s; }
+        th { background: #f8f9fa; padding: 12px; position: sticky; top: 0; z-index: 2; text-align: center; color: var(--dark); white-space: nowrap; }
+        td { padding: 10px; text-align: center; border-bottom: 1px solid #f1f1f1; transition: background 0.3s; white-space: nowrap; }
         
         /* Special Cells */
         .empty-cell { background: #ffeaa7; color: #d35400; font-style: italic; font-size: 0.8rem; }
@@ -279,8 +282,7 @@
         /* Highlight Effects */
         .highlight-col { background-color: #d1f2eb !important; color: var(--primary-dark); font-weight: bold; transform: scale(1.02); }
         .highlight-criteria { background-color: #fad7a0 !important; color: #e67e22; font-weight: bold; }
-        .dimmed-col { opacity: 0.3; filter: blur(1px); }
-
+        
         /* --- Footer --- */
         footer {
             background: var(--dark);
@@ -301,26 +303,90 @@
             transition: color 0.3s;
         }
 
-        footer a:hover {
-            color: var(--accent);
-            transform: scale(1.1);
-        }
+        footer a:hover { color: var(--accent); transform: scale(1.1); }
+        footer span { font-size: 0.9rem; opacity: 0.7; margin-left: 10px; }
 
-        footer span {
-            font-size: 0.9rem;
-            opacity: 0.7;
-            margin-left: 10px;
-        }
+        /* =========================================
+           MOBILE & TABLET RESPONSIVENESS
+        ========================================= */
+        @media (max-width: 1024px) {
+            body {
+                height: auto; /* Enable full scrolling on mobile */
+                overflow-y: auto;
+            }
 
-        /* Mobile */
-        @media (max-width: 768px) {
-            .main-container { flex-direction: column; height: auto; overflow: auto; }
-            .side-panel { width: 100%; height: auto; flex-direction: row; overflow-x: auto; white-space: nowrap; padding: 10px; }
-            .interaction-panel { padding: 15px; min-height: 500px; }
-            .visual-code { font-size: 1.3rem; }
-            .data-panel { height: 350px; }
-            header { padding: 0 15px; }
-            footer { gap: 20px; }
+            .main-container {
+                flex-direction: column;
+                height: auto;
+                overflow: visible;
+            }
+
+            /* Header adjustments */
+            header { padding: 0 15px; height: 60px; }
+            .logo-text { font-size: 1.4rem; }
+            .app-title { font-size: 1.1rem; }
+
+            /* Sidebar becomes horizontal scroll menu */
+            .side-panel {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 10px;
+                border-left: none;
+                border-bottom: 1px solid #eee;
+                order: 1; /* Sidebar First */
+                -webkit-overflow-scrolling: touch; /* Smooth scroll */
+            }
+            
+            .side-panel::-webkit-scrollbar { height: 4px; }
+            .side-panel::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+
+            .lesson-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+                border-radius: 20px;
+                background: #f1f2f6;
+                margin-left: 8px;
+            }
+            
+            .lesson-btn.active {
+                border-right: none;
+                background: var(--primary);
+                color: #fff;
+            }
+
+            /* Main Interaction Area */
+            .interaction-panel {
+                order: 2; /* Content Second */
+                padding: 20px 15px;
+                min-height: auto;
+                background: linear-gradient(to bottom, #fcfdfd, #ecf0f1);
+            }
+
+            .formula-stage {
+                padding: 20px;
+                width: 100%;
+            }
+
+            .visual-code { font-size: 1.2rem; }
+            .visual-code-container { padding: 15px; min-height: 60px; }
+            
+            .controls { flex-direction: column-reverse; gap: 10px; }
+            .btn { width: 100%; justify-content: center; }
+
+            /* Data Panel (Table) moves to bottom */
+            .data-panel {
+                order: 3; /* Table Last */
+                height: 400px; /* Fixed height for scrolling */
+                border-right: none;
+                border-top: 1px solid #eee;
+                flex: none;
+                width: 100%;
+            }
+
+            /* Footer */
+            footer { flex-direction: column; gap: 10px; padding: 20px 0; }
         }
     </style>
 </head>
@@ -328,45 +394,12 @@
 
 <header>
     <div class="logo-text">
-    <span class="logo-x">X</span>
-    <span class="logo-name">اكاديمي</span>
-</div>
+        <span class="logo-x">X</span>
+        <span class="logo-name">اكاديمي</span>
+    </div>
 
-   <header>
-    <div class="app-title"><i class="fas fa-calculator"></i> المعادلات البسيطة</div>
+    <div class="app-title"><i class="fas fa-calculator"></i> <span style="display:none; display:inline-block;">المعادلات البسيطة</span></div>
 </header>
-
-<style>
-/* --- Logo Text --- */
-.logo-text {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-weight: 900;
-    font-size: 1.8rem; /* حجم مناسب */
-}
-
-.logo-x {
-    color: #099999; /* لون X */
-}
-
-.logo-name {
-    color: #000; /* لون اكاديمي */
-}
-
-/* --- App Title --- */
-.app-title {
-    font-weight: 800;
-    color: #000; /* أسود */
-    font-size: 1.5rem; /* حجم مناسب مع X اكاديمي */
-    display: flex;
-    align-items: center;
-    gap: 8px; /* مسافة بين الايقونة والنص */
-}
-</style>
->
-</header>
-
 
     <div class="main-container">
         <nav class="side-panel" id="sidePanel"></nav>
@@ -419,13 +452,15 @@
     <footer>
         <span>Developed by Basel Ghanem</span>
         
-    <a href="https://www.linkedin.com/in/baselghanem/" target="_blank" title="LinkedIn">
-        <i class="fab fa-linkedin"></i>
-    </a>
+        <div>
+            <a href="https://www.linkedin.com/in/baselghanem/" target="_blank" title="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+            </a>
 
-    <!-- WhatsApp -->
-    <a href="https://wa.me/962788458787" target="_blank" title="WhatsApp">
-        <i class="fab fa-whatsapp"></i>
+            <a href="https://wa.me/962788458787" target="_blank" title="WhatsApp" style="margin-right: 15px;">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+        </div>
     </footer>
 
     <script>
@@ -533,7 +568,7 @@
                     { t: "نطاق المين", code: "=MINIFS(D2:D9,", d: "حدد عمود الأرقام (الدرجات).", h: [3] },
                     { t: "نطاق الشرط", code: "=MINIFS(D2:D9, C2:C9,", d: "حدد عمود الشرط (الشعبة).", h: [2] },
                     { t: "الشرط", code: "=MINIFS(D2:D9, C2:C9, \"ب\")", d: "نريد أقل درجة في الشعبة (ب) فقط.", h: [2] },
-                     { t: "النتيجة", code: "=65", d: "أقل درجة في شعبة ب هي 65.", h: [] }
+                      { t: "النتيجة", code: "=65", d: "أقل درجة في شعبة ب هي 65.", h: [] }
                 ]
             }
         ];
@@ -578,6 +613,11 @@
                     b.innerHTML = `<span>${lessons[i].name}</span> <i class="fas fa-pen-fancy"></i>`;
                 } else {
                     b.innerHTML = `<span>${lessons[i].name}</span>`;
+                }
+                
+                // Auto scroll sidebar on mobile
+                if(i === currentLesson && window.innerWidth <= 1024) {
+                   b.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
                 }
             });
 
