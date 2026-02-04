@@ -149,6 +149,23 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            position: relative; /* مهم لتموضع الشخصية */
+        }
+
+        /* --- Character Mascot Style --- */
+        .mascot-img {
+            position: absolute;
+            top: -95px; /* يظهر من الأعلى */
+            left: -40px; /* يظهر من الجانب الأيسر */
+            width: 140px;
+            height: auto;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+        }
+
+        .mascot-img:hover {
+            transform: scale(1.1) rotate(-5deg);
         }
 
         .goal-box {
@@ -164,6 +181,7 @@
             align-items: center;
             gap: 10px;
             text-align: right;
+            margin-top: 10px; /* مسافة بسيطة عشان الشخصية ما تغطي الكلام */
         }
         
         .goal-icon { font-size: 1.5rem; color: #f39c12; flex-shrink: 0; }
@@ -307,7 +325,7 @@
         footer span { font-size: 0.9rem; opacity: 0.7; margin-left: 10px; }
 
         /* =========================================
-           MOBILE & TABLET RESPONSIVENESS
+            MOBILE & TABLET RESPONSIVENESS
         ========================================= */
         @media (max-width: 1024px) {
             body {
@@ -359,7 +377,7 @@
             /* Main Interaction Area */
             .interaction-panel {
                 order: 2; /* Content Second */
-                padding: 20px 15px;
+                padding: 40px 15px 20px 15px; /* Top padding increased for mascot */
                 min-height: auto;
                 background: linear-gradient(to bottom, #fcfdfd, #ecf0f1);
             }
@@ -367,6 +385,18 @@
             .formula-stage {
                 padding: 20px;
                 width: 100%;
+                margin-top: 30px; /* Space for mascot */
+            }
+
+            .mascot-img {
+                width: 100px;
+                top: -70px;
+                left: 50%; /* Center on mobile */
+                transform: translateX(-50%); /* Center trick */
+            }
+            
+            .mascot-img:hover {
+                 transform: translateX(-50%) scale(1.1);
             }
 
             .visual-code { font-size: 1.2rem; }
@@ -410,6 +440,8 @@
             </div>
 
             <div class="formula-stage">
+                <img src="" alt="المساعد الذكي" class="mascot-img" id="mascotChar">
+
                 <div class="goal-box">
                     <i class="fas fa-bullseye goal-icon"></i>
                     <div id="goalText">جاري تحميل المطلوب...</div>
@@ -573,6 +605,18 @@
             }
         ];
 
+        // --- Mascot Images ---
+        const mascotImages = [
+            "https://raw.githubusercontent.com/BaselGhanem/LearningPath-SumGroup/refs/heads/main/1.png",
+            "https://raw.githubusercontent.com/BaselGhanem/LearningPath-SumGroup/refs/heads/main/2.png",
+            "https://raw.githubusercontent.com/BaselGhanem/LearningPath-SumGroup/refs/heads/main/3.png",
+            "https://raw.githubusercontent.com/BaselGhanem/LearningPath-SumGroup/refs/heads/main/4.png",
+            "https://raw.githubusercontent.com/BaselGhanem/LearningPath-SumGroup/refs/heads/main/5.png",
+            "https://raw.githubusercontent.com/BaselGhanem/LearningPath-SumGroup/refs/heads/main/6.png",
+            "https://raw.githubusercontent.com/BaselGhanem/LearningPath-SumGroup/refs/heads/main/7.png",
+            "https://raw.githubusercontent.com/BaselGhanem/LearningPath-SumGroup/refs/heads/main/8.png"
+        ];
+
         let currentLesson = 0;
         let currentStep = 0;
 
@@ -603,6 +647,19 @@
             const lesson = lessons[currentLesson];
             const step = lesson.steps[currentStep];
             
+            // تحديث الشخصية (Mascot) بناءً على الخطوة
+            // نستخدم Modulo للتنقل عبر الصور بشكل دوري وممتع
+            // (currentLesson + currentStep) يضمن تغيير الصورة مع كل نقرة
+            const imgIndex = (currentLesson + currentStep) % mascotImages.length;
+            const mascotImg = document.getElementById('mascotChar');
+            
+            // إضافة تأثير بسيط عند تغيير الصورة
+            mascotImg.style.transform = "scale(0.8) rotate(5deg)";
+            setTimeout(() => {
+                mascotImg.src = mascotImages[imgIndex];
+                mascotImg.style.transform = "scale(1) rotate(0deg)";
+            }, 150);
+
             // تحديث السؤال الثابت
             document.getElementById('goalText').innerHTML = lesson.goal;
 
